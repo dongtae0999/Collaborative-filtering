@@ -1,0 +1,90 @@
+{block content}
+
+	<div class="container">
+		{if $user->loggedIn && isset($recommended)}
+			<h1>Recommended for you</h1>
+			<hr>
+
+		<div class="autoplay">
+			{foreach $recommended as $song}
+
+			<div class="col-sm-3">
+				<div class="panel panel-default">
+					<div class="panel-heading"><b>{$song->name|truncate:30}</b><br>
+					{$song->genre|truncate:32}</div>
+					<div class="panel-body">
+						<img src="
+						{if $song->img_url}{$song->img_url}
+						{else}http://static1.squarespace.com/static/542f1568e4b0b3f01dbc3a44/t/542f305fe4b0b9e132ee6ee8/1412378719625/
+						{/if}" class="img-responsive" style="width:100%" alt="Image"></div>
+					<div class="starRating panel-footer">
+						<div class="rating">
+							{for $i = 10; $i != 0; $i--}
+								<a n:href="Homepage:rating, $rate = $i, $id = $song->id, $position = $paginator->page,$genre">&#9733;</a>
+							{/for}
+						</div>
+				</div>
+					</div>
+				</div>
+				{/foreach}
+				</div>
+
+				{/if}
+		<h1>Best Sellers</h1>
+		<hr>
+		{control filterForm}
+		<hr>
+		<div class="row">
+			{foreach $songs as $song}
+				<div class="col-sm-3">
+					<div class="panel panel-default">
+						<div class="panel-heading"><b>{$song->name|truncate:30}</b><br>
+							{$song->genre|truncate:32}</div>
+						<div class="panel-body"><img src="
+												{if $song->img_url}{$song->img_url}
+												{else}http://static1.squarespace.com/static/542f1568e4b0b3f01dbc3a44/t/542f305fe4b0b9e132ee6ee8/1412378719625/
+												{/if}" class="img-responsive" style="width:100%" alt="Image"></div>
+						<div class="starRating panel-footer">
+							<div class="rating">
+								{for $i = 10; $i != 0; $i--}
+									<a n:href="Homepage:rating, $rate = $i, $id = $song->id, $position = $paginator->page,$genre">&#9733;</a>
+								{/for}
+							</div>
+						</div>
+					</div>
+				</div>
+			{/foreach}
+		</div>
+
+		{if $paginator->pageCount > 1}
+
+			<ul class="pagination">
+
+				{if 1 != $paginator->page - 1}
+					{if !$paginator->first}
+						<li><a n:href="Homepage:, $position = $paginator->base, $genre">First</a></li>
+					{/if}
+				{/if}
+
+				{if 1 != $paginator->page} {* *}
+					<li><a n:href="Homepage:, $position = $paginator->page - 1 , $genre">{$paginator->page - 1}</a></li>
+				{/if}
+
+				<li class="active"><a href="#">{$paginator->page}</a></li>
+
+				{if $paginator->pageCount != $paginator->page} {* it is NOT the last page *}
+					<li><a n:href="Homepage:, $position = $paginator->page + 1 , $genre">{$paginator->page + 1}</a></li>
+				{/if}
+
+				{if $paginator->pageCount != $paginator->page + 1} {* next page is NOT last page *}
+					{if !$paginator->last} {* it is NOT last page *}
+						<li><a n:href="Homepage:, $position = $paginator->pageCount , $genre">Last</a></li>
+					{/if}
+				{/if}
+
+			</ul>
+
+		{/if}
+	</div>
+
+{/block}

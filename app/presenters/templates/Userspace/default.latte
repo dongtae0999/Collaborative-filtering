@@ -1,0 +1,65 @@
+{block content}
+<div class="container">
+    <h1>Rated songs</h1>
+    <hr>
+    <div class="row">
+        {if $songs != NULL}
+        {foreach $songs as $song}
+            <div class="col-sm-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><b>{$song["detail"]->name|truncate:30}</b><br>
+                        {$song["detail"]->genre|truncate:32}</div>
+                    <div class="panel-body">
+                        <img src="
+						{if $song["detail"]->img_url}{$song["detail"]->img_url}
+						{else}http://static1.squarespace.com/static/542f1568e4b0b3f01dbc3a44/t/542f305fe4b0b9e132ee6ee8/1412378719625/
+						{/if}" class="img-responsive" style="width:100%" alt="Image"></div>
+                    <div class="starRating panel-footer">
+                        <div class="rating">
+                            {for $i = 10; $i != 0; $i--}
+                                <a {if $song["rating"]>=$i}
+                                    class="star_filled"
+                                   {/if}
+                                    href="#">&#9733;</a>
+                            {/for}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {/foreach}
+        {else}<p>You have no rated songs</p>
+        {/if}
+        <hr>
+    </div>
+
+    {if $paginator->pageCount > 1}
+
+        <ul class="pagination">
+
+            {if 1 != $paginator->page - 1}
+                {if !$paginator->first}
+                    <li><a n:href="Userspace:, $position = $paginator->base">First</a></li>
+                {/if}
+            {/if}
+
+            {if 1 != $paginator->page} {* *}
+                <li><a n:href="Userspace:, $position = $paginator->page - 1">{$paginator->page - 1}</a></li>
+            {/if}
+
+            <li class="active"><a href="#">{$paginator->page}</a></li>
+
+            {if $paginator->pageCount != $paginator->page} {* it is NOT the last page *}
+                <li><a n:href="Userspace:, $position = $paginator->page + 1">{$paginator->page + 1}</a></li>
+            {/if}
+
+            {if $paginator->pageCount != $paginator->page + 1} {* next page is NOT last page *}
+                {if !$paginator->last} {* it is NOT last page *}
+                    <li><a n:href="Userspace:, $position = $paginator->pageCount">Last</a></li>
+                {/if}
+            {/if}
+
+        </ul>
+
+    {/if}
+</div>
+{/block}

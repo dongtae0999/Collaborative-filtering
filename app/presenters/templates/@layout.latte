@@ -1,0 +1,96 @@
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+ *}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>{ifset title}{include title|striptags} | {/ifset}Nette Sandbox</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="{$basePath}/css/style.css">
+	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.5.9/slick.css"/>
+	<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.5.9/slick.min.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/nette.ajax.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/main.js"></script>
+	<style>
+		/* Remove the navbar's default rounded borders and increase the bottom margin */
+		.navbar {
+			margin-bottom: 50px;
+			border-radius: 0;
+		}
+
+		/* Remove the jumbotron's default bottom margin */
+		.jumbotron {
+			margin-bottom: 0;
+		}
+
+		/* Add a gray background color and some padding to the footer */
+		footer {
+			background-color: #f2f2f2;
+			padding: 25px;
+		}
+	</style>
+	{block head}{/block}
+</head>
+<body>
+
+
+<div class="jumbotron">
+	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+	<div class="container text-center">
+		<h1>Music Store</h1>
+		<p>with collaborative filtering</p>
+	</div>
+</div>
+
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+		<div class="collapse navbar-collapse" id="myNavbar">
+			<ul class="nav navbar-nav">
+				<li {ifCurrent Homepage:}class="active"{/ifCurrent}><a n:href="Homepage:">Home</a></li>
+				{if $user->loggedIn}
+				<li {ifCurrent Userspace:}class="active"{/ifCurrent} ><a n:href="Userspace:">My songs</a></li>
+				{/if}
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				{if $user->isInRole('admin')}
+					<li><a n:href="Algorithm:">Algorithm</a></li>
+				{/if}
+				{if $user->loggedIn}
+					<li><a n:href="Sign:out" n:if="$user->loggedIn"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+
+				{else}
+					<li><a n:href="Sign:register"><span class="glyphicon glyphicon-user"></span> Sign up</a></li>
+					<li><a n:href="Sign:login"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>
+				{/if}
+			</ul>
+		</div>
+	</div>
+</nav>
+
+{include content}
+
+<footer class="container-fluid text-center">
+	<p>Marek Černý</p>
+</footer>
+
+{block scripts}
+	<script src="https://nette.github.io/resources/js/netteForms.min.js"></script>
+	<script src="{$basePath}/js/main.js"></script>
+{/block}
+
+</body>
+</html>
+
